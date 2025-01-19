@@ -10,12 +10,9 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-
 const { $yup } = useNuxtApp()
 const value = ref('')
 const isValid = ref(false)
-const errorMessage = ref('')
 
 const validationSchema = $yup.string().required('This field is required')
 
@@ -23,11 +20,10 @@ watch(value, async (newValue) => {
   try {
     await validationSchema.validate(newValue)
     isValid.value = true
-    errorMessage.value = ''
   }
-  catch (error) {
+  catch (e) {
+    console.error(e)
     isValid.value = false
-    errorMessage.value = error.message
   }
 })
 </script>

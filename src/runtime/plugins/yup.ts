@@ -8,7 +8,7 @@ declare module '#app' {
 }
 
 interface YupSchema {
-  setLocale?: yup.LocaleObject[]
+  setLocale?: yup.LocaleObject
 }
 
 declare module 'nuxt/schema' {
@@ -20,10 +20,8 @@ declare module 'nuxt/schema' {
 export default defineNuxtPlugin((_nuxtApp) => {
   const yupAppConfig = useAppConfig().yup as YupSchema || null
 
-  if (yupAppConfig?.setLocale?.length) {
-    yupAppConfig.setLocale!.forEach((data) => {
-      yup.setLocale(data)
-    })
+  if (yupAppConfig?.setLocale) {
+    yup.setLocale(yupAppConfig.setLocale!)
   }
 
   _nuxtApp.$yup = yup

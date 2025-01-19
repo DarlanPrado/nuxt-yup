@@ -1,6 +1,6 @@
 {
   "name": "nuxt-yup",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "yup implementation for nuxt",
   "repository": "DarlanPrado/nuxt-yup",
   "license": "MIT",

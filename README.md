@@ -1,84 +1,68 @@
-<!--
-Get your module up and running quickly.
+# Nuxt Yup
 
-Find and replace all on all files (CMD+SHIFT+F):
-- Name: My Module
-- Package name: my-module
-- Description: My new Nuxt module
--->
+A Nuxt module to integrate the yup library.
 
-# My Module
+## ✨ Get started
 
-[![npm version][npm-version-src]][npm-version-href]
-[![npm downloads][npm-downloads-src]][npm-downloads-href]
-[![License][license-src]][license-href]
-[![Nuxt][nuxt-src]][nuxt-href]
+1. Install and add to Nuxt with one command
 
-My new Nuxt module for doing amazing things.
+```sh
+npm install nuxt-yup
+```
+## Usage Example
 
-- [✨ &nbsp;Release Notes](/CHANGELOG.md)
-<!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/my-module?file=playground%2Fapp.vue) -->
-<!-- - [📖 &nbsp;Documentation](https://example.com) -->
+```html
+<template>
+  <div>
+    <input
+      v-model="value"
+      placeholder="Enter value"
+    >
+    <p>{{ value }}</p>
+    <p>is valid: {{ isValid }}</p>
+  </div>
+</template>
 
-## Features
+<script setup>
+const { $yup } = useNuxtApp()
+const value = ref('')
+const isValid = ref(false)
 
-<!-- Highlight some of the features your module provide here -->
-- ⛰ &nbsp;Foo
-- 🚠 &nbsp;Bar
-- 🌲 &nbsp;Baz
+const validationSchema = $yup.string().required('This field is required')
 
-## Quick Setup
+watch(value, async (newValue) => {
+  try {
+    await validationSchema.validate(newValue)
+    isValid.value = true
+  }
+  catch (e) {
+    console.error(e)
+    isValid.value = false
+  }
+})
+</script>
+```
+endpoints are linked globally and can be accessed from anywhere
 
-Install the module to your Nuxt application with one command:
+## 📖 Docs
+
+view more from Yup in [Yup documentation](https://www.npmjs.com/package/yup).
+
+### Define setLocale by  [app.config.ts](https://nuxt.com/docs/guide/directory-structure/app-config)
+If you want to customize your error messages you can do this directly through "app.config.ts" using setLocale.
 
 ```bash
-npx nuxi module add my-module
+# app.config.ts
+export default defineAppConfig({
+  yup: {
+    setLocale: {
+      string: {
+        min({ min }) {
+          return `the text is too small, it must have at least ${min} characters`
+        },
+      },
+    },
+  },
+})
+
 ```
-
-That's it! You can now use My Module in your Nuxt app ✨
-
-
-## Contribution
-
-<details>
-  <summary>Local development</summary>
-  
-  ```bash
-  # Install dependencies
-  npm install
-  
-  # Generate type stubs
-  npm run dev:prepare
-  
-  # Develop with the playground
-  npm run dev
-  
-  # Build the playground
-  npm run dev:build
-  
-  # Run ESLint
-  npm run lint
-  
-  # Run Vitest
-  npm run test
-  npm run test:watch
-  
-  # Release new version
-  npm run release
-  ```
-
-</details>
-
-
-<!-- Badges -->
-[npm-version-src]: https://img.shields.io/npm/v/my-module/latest.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-version-href]: https://npmjs.com/package/my-module
-
-[npm-downloads-src]: https://img.shields.io/npm/dm/my-module.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-downloads-href]: https://npmjs.com/package/my-module
-
-[license-src]: https://img.shields.io/npm/l/my-module.svg?style=flat&colorA=020420&colorB=00DC82
-[license-href]: https://npmjs.com/package/my-module
-
-[nuxt-src]: https://img.shields.io/badge/Nuxt-020420?logo=nuxt.js
-[nuxt-href]: https://nuxt.com

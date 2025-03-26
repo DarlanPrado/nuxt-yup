@@ -19,6 +19,6 @@ export default defineNuxtModule({
     _nuxt.options.build.transpile.push(runtimeDir)
 
     // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
-    addPlugin(resolver.resolve('./runtime/plugins/yup.ts'))
+    addPlugin(resolver.resolve('./runtime/plugins/yup'))
   },
 })

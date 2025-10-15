@@ -8,7 +8,7 @@ export interface ModuleOptions {
 }
 
 declare module '@nuxt/schema' {
-  interface PublicRuntimeConfig {
+  interface AppConfigInput {
     yup?: ModuleOptions
   }
 }

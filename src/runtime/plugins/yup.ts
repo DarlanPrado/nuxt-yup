@@ -1,28 +1,14 @@
 import * as yup from 'yup'
-import { defineNuxtPlugin, useAppConfig } from '#app'
+import { defineNuxtPlugin, useRuntimeConfig } from '#imports'
 
-declare module '#app' {
-  interface NuxtApp {
-    $yup: typeof yup
-  }
-}
+export default defineNuxtPlugin(() => {
+  const runtimeConfig = useRuntimeConfig()
 
-interface YupSchema {
-  setLocale?: yup.LocaleObject
-}
+  const setLocale = runtimeConfig.public.yup?.setLocale
 
-declare module 'nuxt/schema' {
-  interface AppConfigInput {
-    yup?: YupSchema
-  }
-}
-
-export default defineNuxtPlugin((_nuxtApp) => {
-  const yupAppConfig = useAppConfig().yup as YupSchema || null
-
-  if (yupAppConfig?.setLocale) {
-    yup.setLocale(yupAppConfig.setLocale!)
+  if (setLocale) {
+    yup.setLocale(setLocale)
   }
 
-  _nuxtApp.$yup = yup
+  return { provide: { yup } }
 })

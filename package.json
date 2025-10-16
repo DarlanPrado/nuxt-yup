@@ -30,7 +30,7 @@
     }
   },
   "main": "./dist/module.cjs",
-  "types": "./dist/types.d.ts",
+  "types": "./dist/types.d.mts",
   "files": [
     "dist"
   ],

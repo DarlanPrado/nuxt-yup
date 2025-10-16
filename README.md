@@ -7,7 +7,7 @@ A Nuxt module to integrate the yup library.
 1. Install and add to Nuxt with one command
 
 ```sh
-npm install nuxt-yup
+npx nuxi@latest module add nuxt-yup
 ```
 ## Usage Example
 
@@ -57,12 +57,9 @@ export default defineAppConfig({
   yup: {
     setLocale: {
       string: {
-        min({ min }) {
-          return `the text is too small, it must have at least ${min} characters`
-        },
+        min: 'Must be at least ${min} letters',
       },
     },
   },
 })
-
 ```

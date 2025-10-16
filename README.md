@@ -7,7 +7,7 @@ A Nuxt module to integrate the yup library.
 1. Install and add to Nuxt with one command
 
 ```sh
-npm install nuxt-yup
+npx nuxi@latest module add nuxt-yup
 ```
 ## Usage Example
 
@@ -24,11 +24,11 @@ npm install nuxt-yup
 </template>
 
 <script setup>
-const { $yup } = useNuxtApp()
+const yup = useYup() // you can use "const { $yup } = useNuxtApp()"
 const value = ref('')
 const isValid = ref(false)
 
-const validationSchema = $yup.string().required('This field is required')
+const validationSchema = yup.string().required('This field is required')
 
 watch(value, async (newValue) => {
   try {
@@ -57,12 +57,9 @@ export default defineAppConfig({
   yup: {
     setLocale: {
       string: {
-        min({ min }) {
-          return `the text is too small, it must have at least ${min} characters`
-        },
+        min: 'Must be at least ${min} letters',
       },
     },
   },
 })
-
 ```

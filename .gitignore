@@ -13,6 +13,11 @@ node_modules
 **/.yarn/cache
 **/.yarn/*state*
 
+# pnpm
+**/.pnpm-store
+**/.pnpm-debug.log*
+**/pnpm-lock.yaml
+
 # Generated dirs
 dist
 

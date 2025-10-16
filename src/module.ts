@@ -1,10 +1,11 @@
-import { defineNuxtModule, addPlugin, createResolver } from '@nuxt/kit'
+import { defineNuxtModule, addPlugin, createResolver, addImportsDir } from '@nuxt/kit'
 import { name, version } from '../package.json'
+import type { ModuleOptions } from './types'
 
 // Module options TypeScript interface definition
 // export interface ModuleOptions {}
 
-export default defineNuxtModule({
+export default defineNuxtModule<ModuleOptions>({
   meta: {
     name,
     version,
@@ -13,12 +14,9 @@ export default defineNuxtModule({
   // Default configuration options of the Nuxt module
   defaults: {},
   setup(_options, _nuxt) {
-    const resolver = createResolver(import.meta.url)
+    const { resolve } = createResolver(import.meta.url)
 
-    const runtimeDir = resolver.resolve('./runtime')
-    _nuxt.options.build.transpile.push(runtimeDir)
-
-    // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
-    addPlugin(resolver.resolve('./runtime/plugins/yup'))
+    addPlugin(resolve('./runtime/plugins/yup'))
+    addImportsDir(resolve('./runtime/composables'))
   },
 })

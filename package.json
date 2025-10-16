@@ -1,6 +1,6 @@
 {
   "name": "nuxt-yup",
-  "version": "1.0.4",
+  "version": "2.0.0",
   "description": "yup implementation for nuxt",
   "repository": "DarlanPrado/nuxt-yup",
   "license": "MIT",
@@ -24,12 +24,11 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/types.d.ts",
-      "import": "./dist/module.mjs",
-      "require": "./dist/module.cjs"
+      "types": "./dist/types.d.mts",
+      "import": "./dist/module.mjs"
     }
   },
-  "main": "./dist/module.mjs",
+  "main": "./dist/module.cjs",
   "types": "./dist/types.d.mts",
   "files": [
     "dist"

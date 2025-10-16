@@ -29,7 +29,7 @@
       "require": "./dist/module.cjs"
     }
   },
-  "main": "./dist/module.cjs",
+  "main": "./dist/module.mjs",
   "types": "./dist/types.d.mts",
   "files": [
     "dist"

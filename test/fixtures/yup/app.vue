@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p v-for="(value, key) in checks" :key="key">
+    <p
+      v-for="(value, key) in checks"
+      :key="key"
+    >
       {{ `${key}: ${value}` }}
     </p>
   </div>

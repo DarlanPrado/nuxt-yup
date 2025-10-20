@@ -10,6 +10,9 @@ export default defineNuxtModule<ModuleOptions>({
     name,
     version,
     configKey: name,
+    compatibility: {
+      nuxt: '>=3.0.0',
+    },
   },
   // Default configuration options of the Nuxt module
   defaults: {},

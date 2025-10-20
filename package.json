@@ -9,7 +9,8 @@
     "nuxt",
     "yup",
     "nuxt-module",
-    "nuxt3"
+    "nuxt3",
+    "nuxt4"
   ],
   "homepage": "https://github.com/DarlanPrado/nuxt-yup#readme",
   "bugs": {

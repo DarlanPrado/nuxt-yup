@@ -14,8 +14,6 @@ export default defineNuxtPlugin(() => {
 
   const setLocale = appConfig.yup?.setLocale
 
-  console.log('setLocale', appConfig)
-
   if (setLocale) {
     yup.setLocale(setLocale)
   }

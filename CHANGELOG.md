@@ -1,6 +1,27 @@
 # Changelog
 
 
+## v2.2.0
+
+[compare changes](https://github.com/DarlanPrado/nuxt-yup/compare/v2.1.0...v2.2.0)
+
+### 🚀 Enhancements
+
+- Add compatibility tag ([7dbfdbe](https://github.com/DarlanPrado/nuxt-yup/commit/7dbfdbe))
+
+### 🩹 Fixes
+
+- Removed log ([8e5fe2d](https://github.com/DarlanPrado/nuxt-yup/commit/8e5fe2d))
+
+### 🏡 Chore
+
+- **release:** V2.1.0 ([72ad0a3](https://github.com/DarlanPrado/nuxt-yup/commit/72ad0a3))
+- Updated keywords ([a2e0660](https://github.com/DarlanPrado/nuxt-yup/commit/a2e0660))
+
+### ❤️ Contributors
+
+- DarlanPrado <darlandoprado2014@gmail.com>
+
 ## v2.1.0
 
 [compare changes](https://github.com/DarlanPrado/nuxt-yup/compare/v1.0.4...v2.1.0)

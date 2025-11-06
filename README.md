@@ -63,3 +63,43 @@ export default defineAppConfig({
   },
 })
 ```
+
+### Add new methods by  [app.config.ts](https://nuxt.com/docs/guide/directory-structure/app-config)
+You can also define your own validation methods directly in "app.config.ts".
+
+```bash
+# app.config.ts
+export default defineAppConfig({
+  yup: {
+    methods: {
+      noWhitespace: {
+        schema: 'string',
+        transform(message = 'Cannot contain spaces') {
+          return this.test(
+            'no-whitespace',
+            message,
+            value => typeof value !== 'string' || !/\s/.test(value)
+          )
+        }
+      }
+    }
+  },
+})
+```
+
+Each key represents the name of the custom method.
+In the example above, you can now use:
+
+```bash
+useYup().string().noWhitespace()
+```
+#### Adding TypeScript Support for Custom Methods
+if you need add type from you method, you can declare module yup
+
+```bash
+declare module 'yup' {
+  interface StringSchema {
+    noWhitespace(...args: any[]): this;
+  }
+}
+```

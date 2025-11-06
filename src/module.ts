@@ -20,6 +20,6 @@ export default defineNuxtModule<ModuleOptions>({
     const { resolve } = createResolver(import.meta.url)
 
     addPlugin(resolve('./runtime/plugins/yup'))
-    addImportsDir(resolve('./runtime/composables'))
+    addImportsDir(resolve('./runtime/composables/useYup'))
   },
 })

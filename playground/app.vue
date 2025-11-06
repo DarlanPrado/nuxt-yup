@@ -14,7 +14,7 @@ const yup = useYup()
 const value = ref('')
 const isValid = ref(false)
 
-const validationSchema = yup.string().min(2).required('This field is required')
+const validationSchema = yup.string().noWhitespace().required('This field is required')
 
 watch(value, async (newValue) => {
   try {

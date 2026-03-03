@@ -18,3 +18,4 @@ describe('ssr', async () => {
     expect(html).toContain('booleanTest: false')
   })
 })
+

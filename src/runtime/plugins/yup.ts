@@ -1,24 +1,25 @@
-import type { InferType, ISchema, AnySchema, AnyObjectSchema } from 'yup';
 import * as yup from 'yup'
 import type { LocaleObject } from 'yup'
 import type { AppConfig } from '@nuxt/schema'
 import { defineNuxtPlugin, useAppConfig } from '#imports'
+import { applyExtensions } from '#build/yup-extensions.mjs'
 
 type SchemaTypeMap = {
-  string: yup.StringSchema<any, any, any>
-  number: yup.NumberSchema<any, any, any>
-  boolean: yup.BooleanSchema<any, any, any>
-  object: yup.ObjectSchema<any, any, any>
-  array: yup.ArraySchema<any, any, any>
-  date: yup.DateSchema<any, any, any>
-  mixed: yup.MixedSchema<any, any, any>
-  schema: yup.Schema<any, any, any>
+  string: yup.StringSchema<never>
+  number: yup.NumberSchema<never>
+  boolean: yup.BooleanSchema<never>
+  object: yup.ObjectSchema<never>
+  array: yup.ArraySchema<never, never>
+  date: yup.DateSchema<never>
+  mixed: yup.MixedSchema<never>
+  schema: yup.Schema<never>
 }
 
 export interface Method<K extends keyof SchemaTypeMap = keyof SchemaTypeMap> {
   schema: K
   transform: (
     this: SchemaTypeMap[K],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...args: any[]
   ) => SchemaTypeMap[K]
 }
@@ -30,7 +31,11 @@ interface YupAppConfig extends AppConfig {
   }
 }
 
-export default defineNuxtPlugin(() => {
+export default defineNuxtPlugin(async () => {
+  // 1. Apply generated extensions first
+  await applyExtensions(yup)
+
+  // 2. Apply app.config settings
   const { yup: yupConfig } = useAppConfig() as YupAppConfig
 
   if (!yupConfig) return { provide: { yup } }
@@ -43,6 +48,7 @@ export default defineNuxtPlugin(() => {
 
   if (methods && Object.keys(methods).length > 0) {
     for (const [key, method] of Object.entries(methods)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const schemaCandidate: any = method.schema === 'schema' ? yup.Schema : yup[method.schema as keyof typeof yup]
 
       if (!schemaCandidate || (typeof schemaCandidate !== 'function' && !('prototype' in schemaCandidate))) {
@@ -53,5 +59,7 @@ export default defineNuxtPlugin(() => {
     }
   }
 
+  // 3. Provide globally
   return { provide: { yup } }
 })
+

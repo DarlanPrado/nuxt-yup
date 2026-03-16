@@ -46,20 +46,17 @@ export default defineNuxtPlugin(async () => {
 
   if (!methods) return { provide: { yup } }
 
-  if (methods && Object.keys(methods).length > 0) {
-    for (const [key, method] of Object.entries(methods)) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const schemaCandidate: any = method.schema === 'schema' ? yup.Schema : yup[method.schema as keyof typeof yup]
+  for (const [key, method] of Object.entries(methods)) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const schemaCandidate: any = method.schema === 'schema' ? yup.Schema : yup[method.schema as keyof typeof yup]
 
-      if (!schemaCandidate || (typeof schemaCandidate !== 'function' && !('prototype' in schemaCandidate))) {
-        console.warn(`[nuxt-yup] Method "${key}" skipped: invalid schema reference.`)
-        continue
-      }
-      yup.addMethod(schemaCandidate, key, method.transform)
+    if (!schemaCandidate || (typeof schemaCandidate !== 'function' && !('prototype' in schemaCandidate))) {
+      console.warn(`[nuxt-yup] Method "${key}" skipped: invalid schema reference.`)
+      continue
     }
+    yup.addMethod(schemaCandidate, key, method.transform)
   }
 
   // 3. Provide globally
   return { provide: { yup } }
 })
-

@@ -1,6 +1,10 @@
 # Changelog
 
 
+## v2.4.1
+
+[compare changes](https://github.com/DarlanPrado/nuxt-yup/compare/v2.4.0...v2.4.1)
+
 ## v2.4.0
 
 [compare changes](https://github.com/DarlanPrado/nuxt-yup/compare/v2.2.0...v2.4.0)

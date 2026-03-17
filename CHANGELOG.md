@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v2.4.3
+
+[compare changes](https://github.com/DarlanPrado/nuxt-yup/compare/v2.4.1...v2.4.3)
+
+### 🏡 Chore
+
+- Bump version to 2.4.2 and update exports in package.json ([5fd05ac](https://github.com/DarlanPrado/nuxt-yup/commit/5fd05ac))
+
+### ❤️ Contributors
+
+- DarlanPrado <darlandoprado2014@gmail.com>
+
 ## v2.4.1
 
 [compare changes](https://github.com/DarlanPrado/nuxt-yup/compare/v2.4.0...v2.4.1)

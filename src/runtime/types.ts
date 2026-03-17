@@ -1,6 +1,4 @@
-import type * as yup from 'yup'
-
-export type YupSchema = typeof yup
+export type YupSchema = typeof import('yup')
 
 declare module '#app' {
   interface NuxtApp {

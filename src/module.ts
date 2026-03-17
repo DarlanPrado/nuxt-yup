@@ -1,25 +1,41 @@
-import { defineNuxtModule, addPlugin, createResolver, addImportsDir } from '@nuxt/kit'
+import { defineNuxtModule, addPlugin, createResolver, addImportsDir, addTemplate, addTypeTemplate } from '@nuxt/kit'
 import { name, version } from '../package.json'
 import type { ModuleOptions } from './types'
+import { buildExtensionArtifacts } from './core/buildExtensionArtifacts'
 
-// Module options TypeScript interface definition
-// export interface ModuleOptions {}
+export { defineYupExtension } from './types'
+export type { AppConfigYupOptions, ModuleOptions, YupExtensionDescriptor, YupExtensionType } from './types'
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
     name,
     version,
-    configKey: name,
+    configKey: 'yup',
     compatibility: {
       nuxt: '>=3.0.0',
     },
   },
-  // Default configuration options of the Nuxt module
   defaults: {},
-  setup(_options, _nuxt) {
+  async setup(options, nuxt) {
     const { resolve } = createResolver(import.meta.url)
 
+    // Add base plugin
     addPlugin(resolve('./runtime/plugins/yup'))
     addImportsDir(resolve('./runtime/composables'))
+
+    const artifacts = await buildExtensionArtifacts(nuxt.options.rootDir, options.methodsDir)
+
+    if (artifacts.typesCode) {
+      const typesCode = artifacts.typesCode
+      addTypeTemplate({
+        filename: 'yup-methods.d.ts',
+        getContents: () => typesCode,
+      })
+    }
+
+    addTemplate({
+      filename: 'yup-methods.mjs',
+      getContents: () => artifacts.templateCode,
+    })
   },
 })

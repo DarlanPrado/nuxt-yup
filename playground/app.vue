@@ -1,29 +1,145 @@
 <template>
-  <div>
-    <input
-      v-model="value"
-      placeholder="Enter value"
-    >
-    <p>{{ value }}</p>
-    <p>is valid: {{ isValid }}</p>
-  </div>
+  <main style="max-width: 900px; margin: 32px auto; font-family: sans-serif; line-height: 1.4">
+    <h1>nuxt-yup playground</h1>
+    <p><strong>Extension mode:</strong> {{ mode }}</p>
+    <p style="opacity: .8">
+      Troque o modo com <code>NUXT_YUP_EXT_MODE=typed</code> ou <code>NUXT_YUP_EXT_MODE=compat</code> e reinicie.
+    </p>
+
+    <section style="margin-top: 24px">
+      <h2>1) extensions ({{ mode }})</h2>
+      <template v-if="mode === 'typed'">
+        <input
+          v-model="typedString"
+          placeholder="CNPJ (14 dígitos)"
+          style="padding: 8px; min-width: 260px"
+        >
+        <button
+          style="margin-left: 8px"
+          @click="runTypedString"
+        >
+          Validar CNPJ
+        </button>
+        <p><strong>cnpj:</strong> {{ typedStringResult }} | {{ typedStringMessage || '-' }}</p>
+
+        <input
+          v-model.number="typedNumber"
+          type="number"
+          placeholder="Número par"
+          style="padding: 8px; min-width: 260px; margin-top: 8px"
+        >
+        <button
+          style="margin-left: 8px"
+          @click="runTypedNumber"
+        >
+          Validar evenAsync
+        </button>
+        <p><strong>evenAsync:</strong> {{ typedNumberResult }} | {{ typedNumberMessage || '-' }}</p>
+      </template>
+
+      <template v-else>
+        <input
+          v-model="compatString"
+          placeholder="Documento (>=6 chars)"
+          style="padding: 8px; min-width: 260px"
+        >
+        <button
+          style="margin-left: 8px"
+          @click="runCompatString"
+        >
+          Validar documentId
+        </button>
+        <p><strong>documentId:</strong> {{ compatStringResult }} | {{ compatStringMessage || '-' }}</p>
+
+        <input
+          v-model.number="compatNumber"
+          type="number"
+          placeholder="> 10"
+          style="padding: 8px; min-width: 260px; margin-top: 8px"
+        >
+        <button
+          style="margin-left: 8px"
+          @click="runCompatNumber"
+        >
+          Validar greaterThanAsync
+        </button>
+        <p><strong>greaterThanAsync:</strong> {{ compatNumberResult }} | {{ compatNumberMessage || '-' }}</p>
+      </template>
+    </section>
+  </main>
 </template>
 
-<script setup>
-const yup = useYup()
-const value = ref('')
-const isValid = ref(false)
+<script setup lang="ts">
+import type { ValidationError } from 'yup'
 
-const validationSchema = yup.string().min(2).required('This field is required')
+const { $yup: yup } = useNuxtApp()
+const config = useRuntimeConfig()
+const mode = config.public.yupExtMode as 'typed' | 'compat'
 
-watch(value, async (newValue) => {
+const typedString = ref('')
+const typedNumber = ref<number | null>(null)
+const typedStringResult = ref<'idle' | 'valid' | 'invalid'>('idle')
+const typedStringMessage = ref('')
+const typedNumberResult = ref<'idle' | 'valid' | 'invalid'>('idle')
+const typedNumberMessage = ref('')
+
+const compatString = ref('')
+const compatNumber = ref<number | null>(null)
+const compatStringResult = ref<'idle' | 'valid' | 'invalid'>('idle')
+const compatStringMessage = ref('')
+const compatNumberResult = ref<'idle' | 'valid' | 'invalid'>('idle')
+const compatNumberMessage = ref('')
+
+type ValidatableSchema = {
+  validate(value: unknown): Promise<unknown>
+}
+
+type ExtendedStringSchema = ReturnType<typeof yup.string> & {
+  cnpj(message?: string): ValidatableSchema
+  documentId(message?: string): ValidatableSchema
+}
+
+type ExtendedNumberSchema = ReturnType<typeof yup.number> & {
+  evenAsync(message?: string): ValidatableSchema
+  greaterThanAsync(limit?: number, message?: string): ValidatableSchema
+}
+
+async function validateAndCapture(schema: ValidatableSchema, value: unknown) {
   try {
-    await validationSchema.validate(newValue)
-    isValid.value = true
+    await schema.validate(value)
+    return { ok: true, message: '' }
   }
-  catch (e) {
-    console.error(e)
-    isValid.value = false
+  catch (error) {
+    const err = error as ValidationError
+    return { ok: false, message: err?.message || 'Invalid' }
   }
-})
+}
+
+async function runTypedString() {
+  const schema = (yup.string() as ExtendedStringSchema).cnpj('Documento inválido')
+  const result = await validateAndCapture(schema, typedString.value)
+  typedStringResult.value = result.ok ? 'valid' : 'invalid'
+  typedStringMessage.value = result.message
+}
+
+async function runTypedNumber() {
+  const schema = (yup.number() as ExtendedNumberSchema).evenAsync('Número deve ser par')
+  const result = await validateAndCapture(schema, typedNumber.value)
+  typedNumberResult.value = result.ok ? 'valid' : 'invalid'
+  typedNumberMessage.value = result.message
+}
+
+async function runCompatString() {
+  const schema = (yup.string() as ExtendedStringSchema).documentId('Documento curto')
+  const result = await validateAndCapture(schema, compatString.value)
+  compatStringResult.value = result.ok ? 'valid' : 'invalid'
+  compatStringMessage.value = result.message
+}
+
+async function runCompatNumber() {
+  const schema = (yup.number() as ExtendedNumberSchema).greaterThanAsync(10, 'Precisa ser > 10')
+  const result = await validateAndCapture(schema, compatNumber.value)
+  compatNumberResult.value = result.ok ? 'valid' : 'invalid'
+  compatNumberMessage.value = result.message
+}
 </script>

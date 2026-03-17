@@ -1,22 +1,25 @@
 import * as yup from 'yup'
 import type { LocaleObject } from 'yup'
-import type { AppConfig } from '@nuxt/schema'
 import { defineNuxtPlugin, useAppConfig } from '#imports'
+import { applyExtensions } from '#build/yup-methods.mjs'
 
-interface YupAppConfig extends AppConfig {
-  yup?: {
-    setLocale?: LocaleObject
-  }
+interface YupAppConfigOptions {
+  setLocale?: LocaleObject
 }
 
-export default defineNuxtPlugin(() => {
-  const appConfig = useAppConfig() as YupAppConfig
+export default defineNuxtPlugin(async () => {
+  // 1. Apply generated extensions first
+  await applyExtensions(yup)
 
-  const setLocale = appConfig.yup?.setLocale
+  // 2. Apply app.config settings
+  const yupConfig = useAppConfig().yup as YupAppConfigOptions | undefined
 
-  if (setLocale) {
-    yup.setLocale(setLocale)
-  }
+  if (!yupConfig) return { provide: { yup } }
 
+  const { setLocale } = yupConfig
+
+  if (setLocale) yup.setLocale(setLocale)
+
+  // 3. Provide globally
   return { provide: { yup } }
 })

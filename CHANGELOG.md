@@ -1,6 +1,59 @@
 # Changelog
 
 
+## v2.4.0
+
+[compare changes](https://github.com/DarlanPrado/nuxt-yup/compare/v2.2.0...v2.4.0)
+
+### 🚀 Enhancements
+
+- Functionality to add a method using app.config.ts ([e8e2f0d](https://github.com/DarlanPrado/nuxt-yup/commit/e8e2f0d))
+- Add typed and compat yup-extensions support ([fb48844](https://github.com/DarlanPrado/nuxt-yup/commit/fb48844))
+- Implement core functionality for yup-extensions including loading, validation, and template generation ([eba982b](https://github.com/DarlanPrado/nuxt-yup/commit/eba982b))
+- Refactor yup extension handling to use yup.methods file and update documentation ([5c26921](https://github.com/DarlanPrado/nuxt-yup/commit/5c26921))
+- Add type checking to CI workflow and enhance validation in playground components ([a3ab921](https://github.com/DarlanPrado/nuxt-yup/commit/a3ab921))
+
+### 📖 Documentation
+
+- Documented whot to add new methods by app.config.ts ([578c216](https://github.com/DarlanPrado/nuxt-yup/commit/578c216))
+- Update README with enhanced features, usage examples, and customization options ([fa0c79c](https://github.com/DarlanPrado/nuxt-yup/commit/fa0c79c))
+- Enhance README with updated features, usage examples, and contributing guidelines ([2babc42](https://github.com/DarlanPrado/nuxt-yup/commit/2babc42))
+
+### 🏡 Chore
+
+- **release:** V2.2.0 ([805c066](https://github.com/DarlanPrado/nuxt-yup/commit/805c066))
+- Update test scripts and dev tooling deps ([42e3fa1](https://github.com/DarlanPrado/nuxt-yup/commit/42e3fa1))
+
+### ❤️ Contributors
+
+- DarlanPrado <darlandoprado2014@gmail.com>
+
+## v2.3.0
+
+[compare changes](https://github.com/DarlanPrado/nuxt-yup/compare/v2.2.0...v2.3.0)
+
+### 🚀 Enhancements
+
+- Add typed and compat yup-extensions support ([fb48844](https://github.com/DarlanPrado/nuxt-yup/commit/fb48844))
+- Functionality to add a method using app.config.ts ([e8e2f0d](https://github.com/DarlanPrado/nuxt-yup/commit/e8e2f0d))
+- Implement core functionality for yup-extensions including loading, validation, and template generation ([eba982b](https://github.com/DarlanPrado/nuxt-yup/commit/eba982b))
+- Refactor yup extension handling to use yup.methods file and update documentation ([5c26921](https://github.com/DarlanPrado/nuxt-yup/commit/5c26921))
+- Add type checking to CI workflow and enhance validation in playground components ([a3ab921](https://github.com/DarlanPrado/nuxt-yup/commit/a3ab921))
+
+### 📖 Documentation
+
+- Documented how to add new methods by app.config.ts ([578c216](https://github.com/DarlanPrado/nuxt-yup/commit/578c216))
+- Update README with enhanced features, usage examples, and customization options ([fa0c79c](https://github.com/DarlanPrado/nuxt-yup/commit/fa0c79c))
+- Enhance README with updated features, usage examples, and contributing guidelines ([2babc42](https://github.com/DarlanPrado/nuxt-yup/commit/2babc42))
+
+### 🏡 Chore
+
+- Update test scripts and dev tooling deps ([42e3fa1](https://github.com/DarlanPrado/nuxt-yup/commit/42e3fa1))
+
+### ❤️ Contributors
+
+- DarlanPrado <darlandoprado2014@gmail.com>
+
 ## v2.2.0
 
 [compare changes](https://github.com/DarlanPrado/nuxt-yup/compare/v2.1.0...v2.2.0)

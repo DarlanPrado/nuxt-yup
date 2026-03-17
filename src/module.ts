@@ -7,31 +7,31 @@ export default defineNuxtModule<ModuleOptions>({
   meta: {
     name,
     version,
-    configKey: name,
+    configKey: 'yup',
     compatibility: {
       nuxt: '>=3.0.0',
     },
   },
   defaults: {},
-  async setup(_options, nuxt) {
+  async setup(options, nuxt) {
     const { resolve } = createResolver(import.meta.url)
 
     // Add base plugin
     addPlugin(resolve('./runtime/plugins/yup'))
     addImportsDir(resolve('./runtime/composables'))
 
-    const artifacts = await buildExtensionArtifacts(nuxt.options.rootDir)
+    const artifacts = await buildExtensionArtifacts(nuxt.options.rootDir, options.methodsDir)
 
     if (artifacts.typesCode) {
       const typesCode = artifacts.typesCode
       addTypeTemplate({
-        filename: 'yup-extensions.d.ts',
+        filename: 'yup-methods.d.ts',
         getContents: () => typesCode,
       })
     }
 
     addTemplate({
-      filename: 'yup-extensions.mjs',
+      filename: 'yup-methods.mjs',
       getContents: () => artifacts.templateCode,
     })
   },

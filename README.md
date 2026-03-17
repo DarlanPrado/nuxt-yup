@@ -7,14 +7,11 @@
 
 A [Nuxt](https://nuxt.com) module that integrates [Yup](https://github.com/jquense/yup) — a schema-based value parsing and validation library — making it available globally across your application.
 
-- [✨ Release Notes](/CHANGELOG.md)
-
 ## Features
 
 - 🔌 &nbsp;Auto-imported `useYup()` composable available everywhere
 - 🌍 &nbsp;Global locale customization via `app.config.ts`
-- 🔧 &nbsp;Add custom validation methods via `app.config.ts`
-- 📦 &nbsp;Extend Yup with a `yup-extensions.ts` file in your project root
+- 📦 &nbsp;Extend Yup with a `yup.methods.ts` file in your project root
 - 🏷️ &nbsp;Full TypeScript support with automatic type augmentation
 
 ---
@@ -90,63 +87,35 @@ export default defineAppConfig({
 
 ---
 
-### Adding custom methods (app.config.ts)
+### Module options (nuxt.config.ts)
 
-Register new validation methods directly in `app.config.ts`. Each key becomes a chainable method on the specified Yup schema type.
+Set `methodsDir` when your methods file is not in the Nuxt root directory.
 
 ```ts
-// app.config.ts
-export default defineAppConfig({
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['nuxt-yup'],
   yup: {
-    methods: {
-      noWhitespace: {
-        schema: 'string',
-        transform(message = 'Cannot contain spaces') {
-          return this.test(
-            'no-whitespace',
-            message,
-            value => typeof value !== 'string' || !/\s/.test(value),
-          )
-        },
-      },
-    },
+    methodsDir: './shared/validation',
   },
 })
 ```
 
-You can now chain the method in any schema:
-
-```ts
-const schema = useYup().string().noWhitespace().required()
-```
-
-**Supported schema types:** `string` | `number` | `boolean` | `object` | `array` | `date` | `mixed` | `schema`
-
-#### TypeScript support for app.config methods
-
-Declare the method signature to get full IntelliSense:
-
-```ts
-// e.g. in a .d.ts file or a plugin
-declare module 'yup' {
-  interface StringSchema {
-    noWhitespace(message?: string): this
-  }
-}
-```
+- The module looks for `yup.methods.*` in this directory.
+- If no file is found, the module logs an error in console and continues without custom methods.
 
 ---
 
-## yup-extensions.ts
+## yup.methods.ts
 
-For more complex or reusable extensions, create a `yup-extensions.ts` file in your **project root**. The module auto-detects it and supports two modes.
+For custom Yup methods, create a `yup.methods.ts` file in your **project root**. This is the only supported way to register new methods. The module auto-detects it and supports two modes.
 
 ### Typed Mode — `defineYupExtension` (recommended)
 
 Export an array of descriptors using the `defineYupExtension` helper. The module generates TypeScript type augmentations automatically — no manual declarations needed.
 
 ```ts
-// yup-extensions.ts
+// yup.methods.ts
 import { defineYupExtension } from 'nuxt-yup'
 
 export default defineYupExtension([
@@ -193,7 +162,7 @@ useYup().number().isEven()
 For full control (e.g. when migrating an existing Yup setup), export a function that receives the `yup` instance directly. Type augmentations are **not** generated automatically in this mode.
 
 ```ts
-// yup-extensions.ts
+// yup.methods.ts
 import type * as Yup from 'yup'
 
 export default function extendYup(yup: typeof Yup) {
@@ -210,7 +179,7 @@ export default function extendYup(yup: typeof Yup) {
 
 ## Supported file extensions
 
-The `yup-extensions` file is resolved in the following order from your project root:
+The `yup.methods` file is resolved in the following order from your project root (or from `methodsDir` when configured):
 
 `.ts` → `.mts` → `.cts` → `.js` → `.mjs` → `.cjs`
 

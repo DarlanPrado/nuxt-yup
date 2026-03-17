@@ -1,5 +1,4 @@
 import type { LocaleObject } from 'yup'
-import type { Method } from './runtime/plugins/yup'
 
 export type YupExtensionType
   = 'string'
@@ -44,6 +43,16 @@ export function defineYupExtension(
 
 export interface ModuleOptions {
   /**
+   * Optional directory containing `yup.methods.*`.
+   *
+   * If omitted, the module looks in the Nuxt root directory.
+   * If provided and no file is found, the module logs an error and continues.
+   */
+  methodsDir?: string
+}
+
+export interface AppConfigYupOptions {
+  /**
    *yup.setLocale function to set custom locale globally
    *
    * Wraps `yup.setLocale()`.
@@ -58,36 +67,18 @@ export interface ModuleOptions {
    * ```
    */
   setLocale?: LocaleObject
-  /**
-   * yup.addMethod function to set custom locale globally
-   *
-   * Wraps `yup.addMethod()`.
-   * Each key represents the name of the method being added.
-   *
-   * Supported schema types:
-   * `'string' | 'number' | 'boolean' | 'object' | 'array' | 'date' | 'mixed' | 'schema'`
-   *
-   * @example
-   * ```ts
-   *methods: {
-   *   noWhitespace: {
-   *     schema: 'string',
-   *     transform(message = 'Cannot contain spaces') {
-   *       return this.test(
-   *         'no-whitespace',
-   *         message,
-   *         value => typeof value !== 'string' || !/\s/.test(value)
-   *       )
-   *     }
-   *   }
-   * }
-   * ```
-   */
-  methods?: Record<string, Method>
 }
 
 declare module '@nuxt/schema' {
-  interface AppConfigInput {
+  interface NuxtConfig {
     yup?: ModuleOptions
+  }
+
+  interface NuxtOptions {
+    yup?: ModuleOptions
+  }
+
+  interface AppConfigInput {
+    yup?: AppConfigYupOptions
   }
 }

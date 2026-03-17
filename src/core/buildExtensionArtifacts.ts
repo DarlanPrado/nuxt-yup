@@ -11,10 +11,15 @@ export interface ExtensionArtifacts {
   typesCode?: string
 }
 
-export async function buildExtensionArtifacts(rootDir: string): Promise<ExtensionArtifacts> {
-  const extensionPath = resolveExtensions(rootDir)
+export async function buildExtensionArtifacts(rootDir: string, methodsDir?: string): Promise<ExtensionArtifacts> {
+  const extensionPath = resolveExtensions(rootDir, methodsDir)
 
   if (!extensionPath) {
+    if (methodsDir) {
+      console.error(
+        `[nuxt-yup] Could not find yup.methods file inside "${methodsDir}". Continuing without custom methods.`,
+      )
+    }
     return { templateCode: EMPTY_TEMPLATE }
   }
 
@@ -36,7 +41,7 @@ export async function buildExtensionArtifacts(rootDir: string): Promise<Extensio
   }
   catch (err) {
     throw new Error(
-      `[nuxt-yup] Failed to load yup-extensions: ${err instanceof Error ? err.message : String(err)}`,
+      `[nuxt-yup] Failed to load yup.methods: ${err instanceof Error ? err.message : String(err)}`,
     )
   }
 }

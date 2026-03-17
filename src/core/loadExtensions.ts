@@ -31,7 +31,7 @@ export async function loadExtensions(filePath: string): Promise<LoadedExtensions
   }
   catch (err) {
     throw new TypeError(
-      `Failed to import yup-extensions: ${err instanceof Error ? err.message : String(err)}`,
+      `Failed to import yup.methods: ${err instanceof Error ? err.message : String(err)}`,
     )
   }
 }

@@ -7,16 +7,7 @@
     </p>
 
     <section style="margin-top: 24px">
-      <h2>1) app.config methods + setLocale</h2>
-      <input v-model="baseValue" placeholder="Digite um texto" style="padding: 8px; min-width: 260px">
-      <button style="margin-left: 8px" @click="runBaseValidation">Validar</button>
-      <p><strong>Resultado:</strong> {{ baseResult }}</p>
-      <p><strong>Mensagem:</strong> {{ baseMessage || '-' }}</p>
-      <small>Regra: required + min(5) + noWhitespace() + hasNuxtPrefix()</small>
-    </section>
-
-    <section style="margin-top: 24px">
-      <h2>2) extensions ({{ mode }})</h2>
+      <h2>1) extensions ({{ mode }})</h2>
       <template v-if="mode === 'typed'">
         <input v-model="typedString" placeholder="CNPJ (14 dígitos)" style="padding: 8px; min-width: 260px">
         <button style="margin-left: 8px" @click="runTypedString">Validar CNPJ</button>
@@ -47,10 +38,6 @@ const { $yup: yup } = useNuxtApp()
 const config = useRuntimeConfig()
 const mode = config.public.yupExtMode as 'typed' | 'compat'
 
-const baseValue = ref('')
-const baseResult = ref<'idle' | 'valid' | 'invalid'>('idle')
-const baseMessage = ref('')
-
 const typedString = ref('')
 const typedNumber = ref<number | null>(null)
 const typedStringResult = ref<'idle' | 'valid' | 'invalid'>('idle')
@@ -74,13 +61,6 @@ async function validateAndCapture(schema: any, value: unknown) {
     const err = error as ValidationError
     return { ok: false, message: err?.message || 'Invalid' }
   }
-}
-
-async function runBaseValidation() {
-  const schema = (yup.string().required().min(5) as any).noWhitespace().hasNuxtPrefix()
-  const result = await validateAndCapture(schema, baseValue.value)
-  baseResult.value = result.ok ? 'valid' : 'invalid'
-  baseMessage.value = result.message
 }
 
 async function runTypedString() {

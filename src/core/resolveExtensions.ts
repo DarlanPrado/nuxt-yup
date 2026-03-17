@@ -1,11 +1,15 @@
 import { existsSync } from 'node:fs'
-import { join } from 'node:path'
+import { isAbsolute, join, resolve } from 'node:path'
 
-const EXTENSION_FILE_EXTENSIONS = ['ts', 'mts', 'cts', 'js', 'mjs', 'cjs'] as const
+const METHODS_FILE_EXTENSIONS = ['ts', 'mts', 'cts', 'js', 'mjs', 'cjs'] as const
 
-export function resolveExtensions(rootDir: string): string | null {
-  for (const ext of EXTENSION_FILE_EXTENSIONS) {
-    const filePath = join(rootDir, `yup-extensions.${ext}`)
+export function resolveExtensions(rootDir: string, methodsDir?: string): string | null {
+  const searchDir = methodsDir
+    ? (isAbsolute(methodsDir) ? methodsDir : resolve(rootDir, methodsDir))
+    : rootDir
+
+  for (const ext of METHODS_FILE_EXTENSIONS) {
+    const filePath = join(searchDir, `yup.methods.${ext}`)
     if (existsSync(filePath)) {
       return filePath
     }

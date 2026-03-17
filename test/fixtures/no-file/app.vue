@@ -12,7 +12,7 @@ import { useYup } from '#imports'
 
 const yup = useYup()
 
-let yupExists = !!yup
+const yupExists = !!yup
 let stringMinWorks = false
 
 // Test that basic Yup still works
@@ -21,7 +21,8 @@ const schema = yup.string().min(5)
 try {
   await schema.validate('valid')
   stringMinWorks = true
-} catch (err) {
+}
+catch {
   stringMinWorks = false
 }
 </script>

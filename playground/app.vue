@@ -9,22 +9,60 @@
     <section style="margin-top: 24px">
       <h2>1) extensions ({{ mode }})</h2>
       <template v-if="mode === 'typed'">
-        <input v-model="typedString" placeholder="CNPJ (14 dígitos)" style="padding: 8px; min-width: 260px">
-        <button style="margin-left: 8px" @click="runTypedString">Validar CNPJ</button>
+        <input
+          v-model="typedString"
+          placeholder="CNPJ (14 dígitos)"
+          style="padding: 8px; min-width: 260px"
+        >
+        <button
+          style="margin-left: 8px"
+          @click="runTypedString"
+        >
+          Validar CNPJ
+        </button>
         <p><strong>cnpj:</strong> {{ typedStringResult }} | {{ typedStringMessage || '-' }}</p>
 
-        <input v-model.number="typedNumber" type="number" placeholder="Número par" style="padding: 8px; min-width: 260px; margin-top: 8px">
-        <button style="margin-left: 8px" @click="runTypedNumber">Validar evenAsync</button>
+        <input
+          v-model.number="typedNumber"
+          type="number"
+          placeholder="Número par"
+          style="padding: 8px; min-width: 260px; margin-top: 8px"
+        >
+        <button
+          style="margin-left: 8px"
+          @click="runTypedNumber"
+        >
+          Validar evenAsync
+        </button>
         <p><strong>evenAsync:</strong> {{ typedNumberResult }} | {{ typedNumberMessage || '-' }}</p>
       </template>
 
       <template v-else>
-        <input v-model="compatString" placeholder="Documento (>=6 chars)" style="padding: 8px; min-width: 260px">
-        <button style="margin-left: 8px" @click="runCompatString">Validar documentId</button>
+        <input
+          v-model="compatString"
+          placeholder="Documento (>=6 chars)"
+          style="padding: 8px; min-width: 260px"
+        >
+        <button
+          style="margin-left: 8px"
+          @click="runCompatString"
+        >
+          Validar documentId
+        </button>
         <p><strong>documentId:</strong> {{ compatStringResult }} | {{ compatStringMessage || '-' }}</p>
 
-        <input v-model.number="compatNumber" type="number" placeholder="> 10" style="padding: 8px; min-width: 260px; margin-top: 8px">
-        <button style="margin-left: 8px" @click="runCompatNumber">Validar greaterThanAsync</button>
+        <input
+          v-model.number="compatNumber"
+          type="number"
+          placeholder="> 10"
+          style="padding: 8px; min-width: 260px; margin-top: 8px"
+        >
+        <button
+          style="margin-left: 8px"
+          @click="runCompatNumber"
+        >
+          Validar greaterThanAsync
+        </button>
         <p><strong>greaterThanAsync:</strong> {{ compatNumberResult }} | {{ compatNumberMessage || '-' }}</p>
       </template>
     </section>
@@ -52,7 +90,21 @@ const compatStringMessage = ref('')
 const compatNumberResult = ref<'idle' | 'valid' | 'invalid'>('idle')
 const compatNumberMessage = ref('')
 
-async function validateAndCapture(schema: any, value: unknown) {
+type ValidatableSchema = {
+  validate(value: unknown): Promise<unknown>
+}
+
+type ExtendedStringSchema = ReturnType<typeof yup.string> & {
+  cnpj(message?: string): ValidatableSchema
+  documentId(message?: string): ValidatableSchema
+}
+
+type ExtendedNumberSchema = ReturnType<typeof yup.number> & {
+  evenAsync(message?: string): ValidatableSchema
+  greaterThanAsync(limit?: number, message?: string): ValidatableSchema
+}
+
+async function validateAndCapture(schema: ValidatableSchema, value: unknown) {
   try {
     await schema.validate(value)
     return { ok: true, message: '' }
@@ -64,28 +116,28 @@ async function validateAndCapture(schema: any, value: unknown) {
 }
 
 async function runTypedString() {
-  const schema = (yup.string() as any).cnpj('Documento inválido')
+  const schema = (yup.string() as ExtendedStringSchema).cnpj('Documento inválido')
   const result = await validateAndCapture(schema, typedString.value)
   typedStringResult.value = result.ok ? 'valid' : 'invalid'
   typedStringMessage.value = result.message
 }
 
 async function runTypedNumber() {
-  const schema = (yup.number() as any).evenAsync('Número deve ser par')
+  const schema = (yup.number() as ExtendedNumberSchema).evenAsync('Número deve ser par')
   const result = await validateAndCapture(schema, typedNumber.value)
   typedNumberResult.value = result.ok ? 'valid' : 'invalid'
   typedNumberMessage.value = result.message
 }
 
 async function runCompatString() {
-  const schema = (yup.string() as any).documentId('Documento curto')
+  const schema = (yup.string() as ExtendedStringSchema).documentId('Documento curto')
   const result = await validateAndCapture(schema, compatString.value)
   compatStringResult.value = result.ok ? 'valid' : 'invalid'
   compatStringMessage.value = result.message
 }
 
 async function runCompatNumber() {
-  const schema = (yup.number() as any).greaterThanAsync(10, 'Precisa ser > 10')
+  const schema = (yup.number() as ExtendedNumberSchema).greaterThanAsync(10, 'Precisa ser > 10')
   const result = await validateAndCapture(schema, compatNumber.value)
   compatNumberResult.value = result.ok ? 'valid' : 'invalid'
   compatNumberMessage.value = result.message

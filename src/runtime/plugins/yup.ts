@@ -1,13 +1,10 @@
 import * as yup from 'yup'
 import type { LocaleObject } from 'yup'
-import type { AppConfig } from '@nuxt/schema'
 import { defineNuxtPlugin, useAppConfig } from '#imports'
 import { applyExtensions } from '#build/yup-methods.mjs'
 
-interface YupAppConfig extends AppConfig {
-  yup?: {
-    setLocale?: LocaleObject
-  }
+interface YupAppConfigOptions {
+  setLocale?: LocaleObject
 }
 
 export default defineNuxtPlugin(async () => {
@@ -15,7 +12,7 @@ export default defineNuxtPlugin(async () => {
   await applyExtensions(yup)
 
   // 2. Apply app.config settings
-  const { yup: yupConfig } = useAppConfig() as YupAppConfig
+  const yupConfig = useAppConfig().yup as YupAppConfigOptions | undefined
 
   if (!yupConfig) return { provide: { yup } }
 

@@ -3,6 +3,9 @@ import { name, version } from '../package.json'
 import type { ModuleOptions } from './types'
 import { buildExtensionArtifacts } from './core/buildExtensionArtifacts'
 
+export { defineYupExtension } from './types'
+export type { AppConfigYupOptions, ModuleOptions, YupExtensionDescriptor, YupExtensionType } from './types'
+
 export default defineNuxtModule<ModuleOptions>({
   meta: {
     name,

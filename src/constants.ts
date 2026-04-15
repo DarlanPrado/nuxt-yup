@@ -12,12 +12,12 @@ export const VALID_TYPES: YupExtensionType[] = [
 ]
 
 export const TYPE_MAP: Record<YupExtensionType, string> = {
-  string: 'Yup.StringSchema',
-  number: 'Yup.NumberSchema',
-  boolean: 'Yup.BooleanSchema',
-  object: 'Yup.ObjectSchema',
-  array: 'Yup.ArraySchema',
-  date: 'Yup.DateSchema',
-  mixed: 'Yup.Schema',
-  schema: 'Yup.Schema',
+  string: 'yup.StringSchema',
+  number: 'yup.NumberSchema',
+  boolean: 'yup.BooleanSchema',
+  object: 'yup.ObjectSchema',
+  array: 'yup.ArraySchema',
+  date: 'yup.DateSchema',
+  mixed: 'yup.Schema',
+  schema: 'yup.Schema',
 }

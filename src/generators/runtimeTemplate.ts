@@ -22,7 +22,7 @@ export function generateMode1Template(descriptors: YupExtensionDescriptor[]): st
     validators.push(`const ${validatorVar} = ${validateSource};`)
 
     methods.push(`
-  Yup.addMethod(${typeName}, '${descriptor.name}', function (message) {
+  yup.addMethod(${typeName}, '${descriptor.name}', function (message) {
     return this.test(
       'custom-${descriptor.name}',
       message || '${escapedMessage}',
@@ -35,8 +35,7 @@ export function generateMode1Template(descriptors: YupExtensionDescriptor[]): st
   });`)
   }
 
-  return `import * as Yup from 'yup';
-
+  return `
 ${validators.join('\n')}
 
 export async function applyExtensions(yup) {

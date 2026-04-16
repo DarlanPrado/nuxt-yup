@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v2.4.4
+
+[compare changes](https://github.com/DarlanPrado/nuxt-yup/compare/v2.4.3...v2.4.4)
+
+### 🩹 Fixes
+
+- Harden yup client interop with optimizeDeps and runtime template ([726edc5](https://github.com/DarlanPrado/nuxt-yup/commit/726edc5))
+- **types:** Align NuxtOptions yup module augmentation ([146fc33](https://github.com/DarlanPrado/nuxt-yup/commit/146fc33))
+
+### 🏡 Chore
+
+- **release:** V2.1.0 ([0631459](https://github.com/DarlanPrado/nuxt-yup/commit/0631459))
+
+### ❤️ Contributors
+
+- DarlanPrado <darlandoprado2014@gmail.com>
+
 ## v2.4.3
 
 [compare changes](https://github.com/DarlanPrado/nuxt-yup/compare/v2.4.1...v2.4.3)

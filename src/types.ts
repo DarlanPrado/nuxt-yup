@@ -75,7 +75,7 @@ declare module '@nuxt/schema' {
   }
 
   interface NuxtOptions {
-    yup?: ModuleOptions
+    yup: ModuleOptions
   }
 
   interface AppConfigInput {
